@@ -1,23 +1,24 @@
 <template>
   <div class="container">
+      <h1 class="title">
+        Star Wars Heroes
+      </h1>
     <div>
-      <p>hair color</p>
+      <input type="text" v-model="search" placeholder="search heroes">
       <SidebarFilter 
         :hairColors="heroesHairColor"
         v-on:select-hair-color="selectHairColor"
+        :genders="heroesGender"
+        v-on:select-gender="selectGender"
       />
-      <h1 class="title">
-        Heroes
-      </h1>
-      <p 
-        v-for="hero in filteredHeroes"
+      <div v-for="hero in filteredHeroes"
         v-bind:key="hero.id"
-        v-bind:title="hero.name"
-        >
-          {{hero.name}} - {{hero.hair_color}}
-      </p>
+        v-bind:title="hero.name"> 
+          {{hero.name}} - {{hero.gender}}
+      </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -129,7 +130,9 @@ export default {
 			"gender": "male",
 		}
 	], 
-      selectedHairColors: []
+      selectedHairColors: [],
+      selectedGenders: [],
+      search: "",
     }
   },
   computed: {
@@ -139,14 +142,35 @@ export default {
          return hero.hair_color
         })
         .filter((value, index, self) => { 
-    return self.indexOf(value) === index;
+          return self.indexOf(value) === index;
+        })
+    },
+    heroesGender: function() {
+      return this.heroes
+        .map((hero) => {
+         return hero.gender
+        })
+        .filter((value, index, self) => {
+          return self.indexOf(value) === index;
         })
     },
     filteredHeroes: function() {
       return this.heroes
-      .filter((hero) => {
-        return this.selectedHairColors.includes(hero.hair_color)
-      })
+        .filter((hero) => {
+          if (this.selectedHairColors.length === 0) {
+            return true
+          }
+          return this.selectedHairColors.includes(hero.hair_color)
+        })
+        .filter((hero) => {
+          if (this.selectedGenders.length === 0) {
+            return true
+          }
+          return this.selectedGenders.includes(hero.gender)
+        })
+        .filter((hero) => {
+          return hero.name.toLowerCase().match(this.search.toLowerCase());
+        });
     }
   },
   methods: {
@@ -155,6 +179,13 @@ export default {
         this.selectedHairColors.splice(this.selectedHairColors.indexOf(color))
       } else {
         this.selectedHairColors.push(color)
+      }
+    },
+    selectGender: function (gender) {
+      if (this.selectedGenders.includes(gender)) {
+        this.selectedGenders.splice(this.selectedGenders.indexOf(gender))
+      } else {
+        this.selectedGenders.push(gender)
       }
     },
   },

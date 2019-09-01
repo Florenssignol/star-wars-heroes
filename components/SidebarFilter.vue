@@ -1,8 +1,6 @@
 <template>
   <div>
-    <!-- {{hairColor}}
-    <input v-on:click="$emit('toggle-is-blonde-hair')" type="checkbox" id="checkbox" v-model="hairColor">
-    <label for="checkbox">hair Color</label>   -->
+    <h2>Hair Colors</h2>
     <div v-for="color in hairColors">
       <input 
         type="checkbox"
@@ -10,19 +8,20 @@
       >
       <label>{{color}}</label>
     </div>
+    <h2>Gender</h2>
+    <div v-for="gender in genders">
+      <input 
+        type="checkbox"
+        v-on:click="$emit('select-gender', gender)" 
+      >
+      <label>{{gender}}</label>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['hairColors'],
-  methods: {
-    toto: () => {
-      console.log('before')
-      this.togglehairColor()
-      console.log('after')
-    }
-  }
+  props: ['hairColors', 'genders']
 }
 </script>
 
