@@ -1,4 +1,4 @@
-# GrooverTest
+# Star Wars Heroes
 
 > My pioneering Nuxt.js project
 
